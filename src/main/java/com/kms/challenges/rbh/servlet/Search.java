@@ -3,6 +3,7 @@ package com.kms.challenges.rbh.servlet;
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
+import com.kms.challenges.rbh.util.RabbitHolesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +24,13 @@ import java.util.Set;
 @WebServlet(name = "search-servlet",urlPatterns = "/search")
 public class Search extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<User.ROLE> reqRoles = new HashSet<>();
         reqRoles.add(User.ROLE.USER);
         reqRoles.add(User.ROLE.ADMIN);
+        if (!RabbitHolesUtil.authenticate((User) req.getSession().getAttribute("user"), reqRoles)) {
+            resp.sendRedirect("/login");
+        }
         String searchText = req.getParameter("searchText");
         try {
             List<UploadFile> fileList = RabbitHolesDao.getInstance().searchByFileName(searchText);

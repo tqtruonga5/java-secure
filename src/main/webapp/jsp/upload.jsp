@@ -7,7 +7,7 @@
     <jsp:attribute name="header"><fmt:message key="rabbitholes.homepage.title"/></jsp:attribute>
     <jsp:body>
         <div class="panel panel-default">
-            <div class="panel-body">`
+            <div class="panel-body">
                 <h3>Share your file to the world!!!</h3>
                 <div>
                     <c:forEach var="file" items="${files}">

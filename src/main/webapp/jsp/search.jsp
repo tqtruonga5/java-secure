@@ -13,7 +13,7 @@
 
                 <div>
                     <div>
-                        <form action="/search" method="POST">
+                        <form action="/search" method="GET">
                             <div class="row">
                                 <div id="form-group-file" class="form-group col-lg-4">
                                     <label>Search: </label>
@@ -31,7 +31,7 @@
                             <c:forEach var="file" items="${files}">
                                 <p>
                                     <span>${file.uploader.firstName}</span> <span>: </span>
-                                    <span><a href="/download?fileName=${file.fileName}&userId=${file.uploader.id}"${file.fileName}</a></span>
+                                    <span><a href="/download?fileName=${file.fileName}&userId=${file.uploader.id}">${file.fileName}</a></span>
                                     <span>${file.uploadNote}</span>
                                 </p>
                             </c:forEach>

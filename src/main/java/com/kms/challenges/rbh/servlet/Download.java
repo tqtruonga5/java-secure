@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -25,9 +26,10 @@ public class Download extends HttpServlet {
         String fileName = req.getParameter("fileName");
         String userId = req.getParameter("userId");
         File file = new File(RabbitHolesUtil.properties.get("upload.location") + userId + "/" + fileName);
-        resp.setHeader("Content-disposition", "attachment; filename=" + fileName);
         try (FileInputStream inputStream = new FileInputStream(file)) {
+            resp.setHeader("Content-disposition", "attachment; filename=" + fileName);
             IOUtils.copy(inputStream, resp.getOutputStream());
         }
+
     }
 }

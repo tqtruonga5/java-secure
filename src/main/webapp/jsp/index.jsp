@@ -18,7 +18,7 @@
                         </c:when>
                         <c:otherwise>
                             <div>
-                                <form action="/search" method="POST">
+                                <form action="/search" method="GET">
                                     <div class="row">
                                         <div id="form-group-file" class="form-group col-lg-4">
                                             <label>Search: </label>
