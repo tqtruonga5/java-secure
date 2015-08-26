@@ -10,7 +10,7 @@
     <uri>http://rbh.kms.challenges.com/customtags</uri>
     <tag>
         <name>authorize</name>
-        <tag-class>com.kms.challenges.rbh.web.customtags.AuthorizeTag</tag-class>
+        <tag-class>com.kms.challenges.rbh.web.tag.AuthorizeTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>accessMode</name>
@@ -19,7 +19,7 @@
     </tag>
     <tag>
         <name>authenticate</name>
-        <tag-class>com.kms.challenges.rbh.web.customtags.AuthenticateTag</tag-class>
+        <tag-class>com.kms.challenges.rbh.web.tag.AuthenticateTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>access</name>

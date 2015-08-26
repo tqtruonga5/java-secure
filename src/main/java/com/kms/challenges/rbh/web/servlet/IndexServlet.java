@@ -1,6 +1,8 @@
 package com.kms.challenges.rbh.web.servlet;
 
-import com.kms.challenges.rbh.dao.RabbitHolesDao;
+import com.kms.challenges.rbh.dao.FileDao;
+import com.kms.challenges.rbh.dao.impl.FileDaoImpl;
+import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.User;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
 
@@ -19,7 +21,10 @@ import java.util.Set;
  */
 @WebServlet(name = "index-servlet",urlPatterns = "/index")
 public class IndexServlet extends HttpServlet {
-
+    private FileDao dao;
+    public IndexServlet() {
+        dao = new FileDaoImpl(new UserDaoImpl());
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<User.ROLE> requireRoles = new HashSet<>();
@@ -29,7 +34,7 @@ public class IndexServlet extends HttpServlet {
             resp.sendRedirect("/login");
         }
         try {
-            req.setAttribute("files", RabbitHolesDao.getInstance().getAllFiles());
+            req.setAttribute("files", dao.getAllFiles());
         } catch (SQLException e) {
             throw new ServletException(e);
         }

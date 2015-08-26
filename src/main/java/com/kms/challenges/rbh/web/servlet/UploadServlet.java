@@ -1,10 +1,12 @@
 package com.kms.challenges.rbh.web.servlet;
 
-import com.kms.challenges.rbh.dao.RabbitHolesDao;
-import com.kms.challenges.rbh.model.error.ValidationError;
+import com.kms.challenges.rbh.dao.FileDao;
+import com.kms.challenges.rbh.dao.impl.FileDaoImpl;
+import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.FileMetadata;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
+import com.kms.challenges.rbh.model.error.ValidationError;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
 import org.apache.commons.io.IOUtils;
 
@@ -30,6 +32,11 @@ import java.util.Set;
 @WebServlet(name = "upload-servlet", urlPatterns = "/upload")
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
+    private FileDao fileDao;
+    public UploadServlet() {
+        fileDao = new FileDaoImpl(new UserDaoImpl());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<User.ROLE> requireRoles = new HashSet<>();
@@ -40,7 +47,7 @@ public class UploadServlet extends HttpServlet {
             resp.sendRedirect("/login");
         }
         try {
-            req.setAttribute("files", RabbitHolesDao.getInstance().getFileByUserId(user.getId()));
+            req.setAttribute("files", fileDao.getFileByUserId(user.getId()));
             req.getRequestDispatcher("/jsp/upload.jsp").forward(req, resp);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,15 +70,16 @@ public class UploadServlet extends HttpServlet {
                 req.getSession().getAttribute("user");
         File storeFolder = new File(RabbitHolesUtil.getUploadLocation() + user.getId() + "/");
         storeFolder.mkdirs();
-        File storeFile = new File(RabbitHolesUtil.getUploadLocation() + user.getId()+"/"+ uploadedFile.getSubmittedFileName());
-        try(FileOutputStream fileOutputStream=new FileOutputStream(storeFile)) {
+        File storeFile = new File(
+                RabbitHolesUtil.getUploadLocation() + user.getId() + "/" + uploadedFile.getSubmittedFileName());
+        try (FileOutputStream fileOutputStream = new FileOutputStream(storeFile)) {
             IOUtils.copy(uploadedFile.getInputStream(), fileOutputStream);
         }
         uploadedFile.getSize();
         UploadFile file = new UploadFile(null, uploadedFile.getSubmittedFileName(), uploadNote,
                 new FileMetadata(null, uploadedFile.getContentType(), uploadedFile.getSize()), user);
         try {
-            RabbitHolesDao.getInstance().addFile(file);
+            fileDao.addFile(file);
         } catch (SQLException e) {
             throw new ServletException(e);
         }

@@ -1,9 +1,10 @@
 package com.kms.challenges.rbh.web.servlet;
 
-import com.kms.challenges.rbh.dao.RabbitHolesDao;
-import com.kms.challenges.rbh.model.error.ValidationError;
+import com.kms.challenges.rbh.dao.UserDao;
+import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.LoginForm;
 import com.kms.challenges.rbh.model.User;
+import com.kms.challenges.rbh.model.error.ValidationError;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,10 @@ import java.util.Map;
 @WebServlet(name = "login-servlet",urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServlet.class.getCanonicalName());
-
+    private UserDao dao;
+    public  LoginServlet() {
+        dao = new UserDaoImpl();
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOGGER.debug("Login page initialize");
@@ -43,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         }
         req.setAttribute("validationErrors", errorMap);
         try {
-            User user = RabbitHolesDao.getInstance().getUserByEmailAndPassword(form.getEmail(), form.getPassword());
+            User user = dao.getUserByEmailAndPassword(form.getEmail(), form.getPassword());
             if (user != null) {
                 req.getSession().setAttribute("user", user);
                 //if the login user is our dear admin, set a cookie flag for him, more convenient for him when he

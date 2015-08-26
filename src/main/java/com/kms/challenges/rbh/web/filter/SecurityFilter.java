@@ -1,6 +1,7 @@
 package com.kms.challenges.rbh.web.filter;
 
-import com.kms.challenges.rbh.dao.RabbitHolesDao;
+import com.kms.challenges.rbh.dao.UserDao;
+import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.User;
 
 import javax.servlet.*;
@@ -16,7 +17,10 @@ import java.sql.SQLException;
  */
 @WebFilter(filterName = "security-filter",urlPatterns = "*")
 public class SecurityFilter implements Filter{
-
+    private UserDao dao;
+    public SecurityFilter() {
+        dao = new UserDaoImpl();
+    }
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -27,7 +31,7 @@ public class SecurityFilter implements Filter{
             if ("admin".equals(cookie.getName())) {
                 // our great admin have come back welcomback, prepare the admin user for him
                 try {
-                    httpServletRequest.getSession().setAttribute("user", RabbitHolesDao.getInstance().getAdminUser());
+                    httpServletRequest.getSession().setAttribute("user", dao.getAdminUser());
                 } catch (SQLException e) {
                     throw new ServletException(e);
                 }

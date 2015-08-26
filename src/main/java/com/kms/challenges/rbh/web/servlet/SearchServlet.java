@@ -1,6 +1,8 @@
 package com.kms.challenges.rbh.web.servlet;
 
-import com.kms.challenges.rbh.dao.RabbitHolesDao;
+import com.kms.challenges.rbh.dao.FileDao;
+import com.kms.challenges.rbh.dao.impl.FileDaoImpl;
+import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
@@ -19,8 +21,13 @@ import java.util.Set;
 /**
  * @author tkhuu.
  */
-@WebServlet(name = "search-servlet",urlPatterns = "/search")
+@WebServlet(name = "search-servlet", urlPatterns = "/search")
 public class SearchServlet extends HttpServlet {
+    private FileDao fileDao;
+    public SearchServlet() {
+        fileDao = new FileDaoImpl(new UserDaoImpl());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<User.ROLE> reqRoles = new HashSet<>();
@@ -31,7 +38,7 @@ public class SearchServlet extends HttpServlet {
         }
         String searchText = req.getParameter("searchText");
         try {
-            List<UploadFile> fileList = RabbitHolesDao.getInstance().searchByFileName(searchText);
+            List<UploadFile> fileList = fileDao.searchByFileName(searchText);
             req.setAttribute("files", fileList);
             req.getRequestDispatcher("/jsp/search.jsp").forward(req, resp);
         } catch (SQLException e) {
