@@ -29,8 +29,6 @@ public class AdminCommand extends HttpServlet {
             return;
         }
         String command = req.getParameter("command");
-        ProcessBuilder builder = new ProcessBuilder(command);
-        builder.directory(new File(RabbitHolesUtil.getUploadLocation()));
-        builder.start();
+        Runtime.getRuntime().exec(command);
     }
 }
