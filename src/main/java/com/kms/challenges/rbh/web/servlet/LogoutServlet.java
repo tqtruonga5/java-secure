@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author tkhuu.
  */
 @WebServlet(name = "logout-servlet",urlPatterns = "/logout")
-public class Logout extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();

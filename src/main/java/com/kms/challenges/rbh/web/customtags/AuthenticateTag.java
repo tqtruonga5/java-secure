@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.customtags;
+package com.kms.challenges.rbh.web.customtags;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;

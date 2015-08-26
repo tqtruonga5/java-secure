@@ -1,6 +1,5 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
-import com.kms.challenges.rbh.customtags.AuthorizeTag;
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
 import com.kms.challenges.rbh.model.User;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
@@ -19,7 +18,7 @@ import java.util.Set;
  * @author tkhuu.
  */
 @WebServlet(name = "index-servlet",urlPatterns = "/index")
-public class Index extends HttpServlet {
+public class IndexServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -1,7 +1,7 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
-import com.kms.challenges.rbh.error.ValidationError;
+import com.kms.challenges.rbh.model.error.ValidationError;
 import com.kms.challenges.rbh.model.FileMetadata;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
@@ -29,7 +29,7 @@ import java.util.Set;
  */
 @WebServlet(name = "upload-servlet", urlPatterns = "/upload")
 @MultipartConfig
-public class Upload extends HttpServlet {
+public class UploadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<User.ROLE> requireRoles = new HashSet<>();

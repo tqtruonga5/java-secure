@@ -1,12 +1,10 @@
 package com.kms.challenges.rbh.dao;
 
-import com.kms.challenges.rbh.exception.FileNotFoundException;
 import com.kms.challenges.rbh.model.FileMetadata;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;

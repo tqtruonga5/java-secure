@@ -1,7 +1,5 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
-import com.kms.challenges.rbh.dao.RabbitHolesDao;
-import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
 import org.apache.commons.io.IOUtils;
 
@@ -12,14 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
  * @author tkhuu.
  */
 @WebServlet(name = "download-servlet", urlPatterns = "/download")
-public class Download extends HttpServlet {
+public class DownloadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Download allow all user to download so let save sql select here

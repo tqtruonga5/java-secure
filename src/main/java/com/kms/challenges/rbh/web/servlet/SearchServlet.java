@@ -1,11 +1,9 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +20,7 @@ import java.util.Set;
  * @author tkhuu.
  */
 @WebServlet(name = "search-servlet",urlPatterns = "/search")
-public class Search extends HttpServlet {
+public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<User.ROLE> reqRoles = new HashSet<>();

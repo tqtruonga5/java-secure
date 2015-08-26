@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.customtags;
+package com.kms.challenges.rbh.web.customtags;
 
 import com.kms.challenges.rbh.model.User;
 

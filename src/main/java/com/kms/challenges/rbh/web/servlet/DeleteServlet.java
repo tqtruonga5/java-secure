@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
 import com.kms.challenges.rbh.model.UploadFile;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * @author tkhuu.
  */
 @WebServlet(name = "delete-servlet", urlPatterns = "/delete")
-public class Delete extends HttpServlet {
+public class DeleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String fileIdString = req.getParameter("fileId");

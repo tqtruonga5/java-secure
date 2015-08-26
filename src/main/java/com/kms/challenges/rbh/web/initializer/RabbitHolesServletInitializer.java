@@ -1,12 +1,8 @@
-package com.kms.challenges.rbh.initializer;
-
-import com.kms.challenges.rbh.servlet.Login;
+package com.kms.challenges.rbh.web.initializer;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import java.util.Arrays;
 import java.util.Set;
 
 /**

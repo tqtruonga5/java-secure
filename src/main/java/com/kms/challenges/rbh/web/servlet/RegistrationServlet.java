@@ -1,11 +1,10 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
-import com.kms.challenges.rbh.error.ValidationError;
+import com.kms.challenges.rbh.model.error.ValidationError;
 import com.kms.challenges.rbh.model.RegistrationForm;
 import com.kms.challenges.rbh.model.User;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,16 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author tkhuu.
  */
 @WebServlet(name = "registration-servlet",urlPatterns = "register")
-public class Registration extends HttpServlet {
+public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/jsp/user/registrationForm.jsp").forward(req,resp);

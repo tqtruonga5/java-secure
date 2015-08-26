@@ -3,7 +3,7 @@ package com.kms.challenges.rbh.util;
 import com.kms.challenges.rbh.annotation.FormField;
 import com.kms.challenges.rbh.annotation.MatchWith;
 import com.kms.challenges.rbh.annotation.Require;
-import com.kms.challenges.rbh.error.ValidationError;
+import com.kms.challenges.rbh.model.error.ValidationError;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.filter;
+package com.kms.challenges.rbh.web.filter;
 
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
 import com.kms.challenges.rbh.model.User;

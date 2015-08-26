@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.error;
+package com.kms.challenges.rbh.model.error;
 
 /**
  * @author tkhuu.

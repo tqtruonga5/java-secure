@@ -1,7 +1,7 @@
-package com.kms.challenges.rbh.servlet;
+package com.kms.challenges.rbh.web.servlet;
 
 import com.kms.challenges.rbh.dao.RabbitHolesDao;
-import com.kms.challenges.rbh.error.ValidationError;
+import com.kms.challenges.rbh.model.error.ValidationError;
 import com.kms.challenges.rbh.model.LoginForm;
 import com.kms.challenges.rbh.model.User;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
@@ -23,8 +23,8 @@ import java.util.Map;
  * @author tkhuu.
  */
 @WebServlet(name = "login-servlet",urlPatterns = "/login")
-public class Login extends HttpServlet {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Login.class.getCanonicalName());
+public class LoginServlet extends HttpServlet {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginServlet.class.getCanonicalName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

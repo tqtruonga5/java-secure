@@ -1,1 +1,1 @@
-com.kms.challenges.rbh.initializer.RabbitHolesServletInitializer
+com.kms.challenges.rbh.web.initializer.RabbitHolesServletInitializer
