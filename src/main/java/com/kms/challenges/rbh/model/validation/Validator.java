@@ -7,12 +7,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class Validator {
-    public static <T> T convertRequestToBean(
-            Class<T> clazz, HttpServletRequest request,
+    public static <T> T parseToBeanAndValidate(
+            Class<T> clazz, Map<String, String[]> parameterMap,
             Map<String, ValidationError> errorMap) throws
             IllegalAccessException, InstantiationException {
         T bean = clazz.newInstance();
@@ -21,27 +26,15 @@ public class Validator {
             for (Annotation ano : field.getAnnotations()) {
                 if (ano instanceof FormField) {
                     FormField formfieldAnnotation = (FormField) ano;
-                    String value = request.getParameter(formfieldAnnotation.value());
                     Class fieldType = field.getType();
-                    if (fieldType == String.class) {
-                        field.set(bean, value);
-                    }
-                    if (fieldType == int.class || fieldType == Integer.class) {
-                        field.set(bean, Integer.parseInt(value));
-                    }
-                    if (fieldType == boolean.class || fieldType == Boolean.class) {
-                        field.set(bean, Boolean.parseBoolean(value));
-                    }
-                    if (fieldType == long.class || fieldType == Long.class) {
-                        field.set(bean, Long.parseLong(value));
-                    }
-                    if (fieldType == float.class || fieldType == Float.class) {
-                        field.set(bean, Float.parseFloat(value));
-                    }
+                    String[] parameterValue = parameterMap.get(formfieldAnnotation.value());
+                    Object fieldValue = getFieldValue(parameterValue, fieldType);
                     for (Annotation ano1 : field.getAnnotations()) {
                         if (ano1 instanceof Require) {
                             if (((Require) ano1).require()) {
-                                if (StringUtils.isEmpty(request.getParameter(formfieldAnnotation.value()))) {
+                                if (parameterValue == null || parameterValue.length == 0 || (parameterValue.length ==
+                                        1 && StringUtils
+                                        .isEmpty(parameterValue[0]))) {
                                     errorMap.put(formfieldAnnotation.value(),
                                             new ValidationError(formfieldAnnotation.value(),
                                                     ((Require) ano1).errorMessage()));
@@ -49,18 +42,68 @@ public class Validator {
                             }
                         }
                         if (ano1 instanceof MatchWith) {
-                            if (request.getParameter(formfieldAnnotation.value()) != null && !request
-                                    .getParameter(formfieldAnnotation.value())
-                                    .equals(request.getParameter(((MatchWith) ano1).fieldName()))) {
-                                errorMap.put(formfieldAnnotation.value(),
-                                        new ValidationError(formfieldAnnotation.value(),
-                                                ((MatchWith) ano1).errorMessage()));
+                            if (fieldValue != null) {
+                                //get the other field value
+                                String matchFieldName = ((MatchWith) ano1).fieldName();
+                                Object matchFieldValue = null;
+                                for (Field field1 : clazz.getDeclaredFields()) {
+                                    field1.setAccessible(true);
+                                    for (Annotation annotation : field1.getAnnotations()) {
+                                        if (annotation instanceof FormField) {
+                                            FormField fieldAnnotation = (FormField) annotation;
+                                            if (fieldAnnotation.value().equals(matchFieldName)) {
+                                                matchFieldValue = getFieldValue(parameterMap.get(matchFieldName),
+                                                        field1.getType());
+                                            }
+                                        }
+                                    }
+                                }
+                                if (!fieldValue
+                                        .equals(matchFieldValue)) {
+                                    errorMap.put(formfieldAnnotation.value(),
+                                            new ValidationError(formfieldAnnotation.value(),
+                                                    ((MatchWith) ano1).errorMessage()));
+                                }
                             }
                         }
                     }
+                    field.set(bean, fieldValue);
                 }
             }
         }
         return bean;
+    }
+
+    private static <T> T getFieldValue(String[] parameterValue, Class<T> fieldType) {
+        if (parameterValue == null) {
+            return null;
+        }
+        if (fieldType == String.class) {
+            return fieldType.cast(parameterValue[0]);
+        }
+        if (fieldType == int.class || fieldType == Integer.class) {
+            return fieldType.cast(Integer.parseInt(parameterValue[0]));
+        }
+        if (fieldType == boolean.class || fieldType == Boolean.class) {
+            return fieldType.cast(Boolean.parseBoolean(parameterValue[0]));
+        }
+        if (fieldType == long.class || fieldType == Long.class) {
+            return fieldType.cast(Long.parseLong(parameterValue[0]));
+        }
+        if (fieldType == float.class || fieldType == Float.class) {
+            return fieldType.cast(Float.parseFloat(parameterValue[0]));
+        }
+        if (fieldType.isArray()) {
+            Object[] array = new Object[parameterValue.length];
+            for (int i = 0; i < parameterValue.length; i++) {
+                array[i] = getFieldValue(new String[]{parameterValue[i]}, fieldType.getComponentType());
+            }
+            return fieldType.cast(array);
+        }
+        //supprot only list of string
+        if (fieldType == List.class) {
+            return fieldType.cast(Arrays.asList(parameterValue));
+        }
+        throw new IllegalArgumentException(String.format("Class type %s are not supported", fieldType.toString()));
     }
 }

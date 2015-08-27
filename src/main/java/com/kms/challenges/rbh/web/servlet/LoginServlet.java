@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
         Map<String, ValidationError> errorMap = new HashMap<>();
         LoginForm form=null;
         try {
-            form = Validator.convertRequestToBean(LoginForm.class, req, errorMap);
+            form = Validator.parseToBeanAndValidate(LoginForm.class, req.getParameterMap(), errorMap);
         } catch (IllegalAccessException|InstantiationException e) {
             throw new ServletException(e);
         }

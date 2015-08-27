@@ -37,7 +37,7 @@ public class RegistrationServlet extends HttpServlet {
         Map<String, ValidationError> errorMap = new HashMap<>();
         try {
             RegistrationForm form = Validator
-                    .convertRequestToBean(RegistrationForm.class, req, errorMap);
+                    .parseToBeanAndValidate(RegistrationForm.class, req.getParameterMap(), errorMap);
             if (!errorMap.isEmpty()) {
                 req.setAttribute("validationErrors", errorMap);
                 req.setAttribute("registrationForm", form);
