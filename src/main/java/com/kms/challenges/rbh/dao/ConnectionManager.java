@@ -53,7 +53,7 @@ public class ConnectionManager {
     }
     public static void initDatabase() throws SQLException {
         for (String statement : getInitStatements()) {
-            try (Statement statementSql = ConnectionManager.getConnection().createStatement()) {
+            try (Connection connection = ConnectionManager.getConnection(); Statement statementSql =connection.createStatement()){
                 statementSql.execute(statement);
             }
         }

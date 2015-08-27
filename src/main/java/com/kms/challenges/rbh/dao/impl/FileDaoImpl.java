@@ -8,6 +8,7 @@ import com.kms.challenges.rbh.model.FileMetadata;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,7 +28,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
     @Override
     public List<UploadFile> getAllFiles() throws SQLException {
         List<UploadFile> files = new ArrayList<>();
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             try (ResultSet resultSet = select.executeQuery("select * from files")) {
                 while (resultSet.next()) {
                     //get file metadata
@@ -35,7 +37,7 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
                     FileMetadata metadata = getFileMetadata(file_metadata_id);
                     //try to get the user
                     User user = null;
-                    try (Statement selectUserFiles = ConnectionManager.getConnection()
+                    try (Statement selectUserFiles = connection
                             .createStatement(); ResultSet userFileResultSet = selectUserFiles.executeQuery(
                             String.format("select * from user_files where file_id=%s", resultSet.getLong("id")))) {
                         if (userFileResultSet.next()) {
@@ -55,7 +57,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
 
     @Override
     public UploadFile getFile(Long fileId) throws SQLException {
-        try (Statement statement = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement statement = connection
+                .createStatement()) {
             try (ResultSet resultSet = statement
                     .executeQuery(String.format("select * from files where id=%s", fileId))) {
                 if (resultSet.next()) {
@@ -73,7 +76,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
 
     @Override
     public User getUploader(Long fileId) throws SQLException {
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             try (ResultSet resultSet = select
                     .executeQuery(String.format("select * from user_files where file_id=%s", fileId))) {
                 if (resultSet.next()) {
@@ -89,7 +93,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
 
     @Override
     public void deleteFile(UploadFile file) throws SQLException {
-        try (Statement delete = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement delete = connection
+                .createStatement()) {
             delete.execute(String.format("delete from user_files where file_id=%s", file.getId()));
             delete.execute(String.format("delete from files where id=%s", file.getId()));
             delete.execute(String.format("delete from file_metadatas where id=%s", file.getFileMetadata().getId()));
@@ -99,8 +104,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
     @Override
     public FileMetadata getFileMetadata(long file_metadata_id) throws SQLException {
         FileMetadata metadata = null;
-        try (Statement selectMetadata = ConnectionManager.getConnection()
-                .createStatement(); ResultSet metadataResultSet = selectMetadata
+        try (Connection connection = ConnectionManager.getConnection(); Statement statementSql = connection
+                .createStatement(); ResultSet metadataResultSet = statementSql
                 .executeQuery(String.format("select * from file_metadatas where id=%s",
                         file_metadata_id))) {
             if (metadataResultSet.next()) {
@@ -115,7 +120,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
     public Long addFile(UploadFile uploadFile) throws SQLException {
         Long metadataId = insertMetadata(uploadFile.getFileMetadata());
         Long fileId = null;
-        try (Statement insertFile = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement insertFile = connection
+                .createStatement()) {
             insertFile.execute(
                     String.format("insert into files(file_name,upload_note,file_metadata_id) values('%s','%s',%s)",
                             uploadFile.getFileName(), uploadFile.getUploadNote(), metadataId));
@@ -124,7 +130,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
                 fileId = resultSet.getLong(1);
             }
         }
-        try (Statement insertFileUser = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement insertFileUser = connection
+                .createStatement()) {
             insertFileUser.execute(String.format("insert into user_files(user_id,file_id) values(%s,%s)",
                     uploadFile.getUploader().getId(), fileId));
         }
@@ -133,7 +140,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
 
     @Override
     public Long insertMetadata(FileMetadata metadata) throws SQLException {
-        try (Statement insertMetadata = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement insertMetadata = connection
+                .createStatement()) {
             insertMetadata.execute(String.format("insert into file_metadatas(file_type,file_size) values('%s',%s)",
                     metadata.getFileType(), metadata.getFileSize()));
             ResultSet resultSet = insertMetadata.getGeneratedKeys();
@@ -147,7 +155,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
     @Override
     public List<UploadFile> getFileByUserId(Long userId) throws SQLException {
         List<UploadFile> uploadFiles = new ArrayList<>();
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             ResultSet resultSet = select
                     .executeQuery(String.format("select * from user_files where user_id=%s", userId));
             while (resultSet.next()) {
@@ -161,7 +170,8 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
     @Override
     public List<UploadFile> searchByFileName(String fileName) throws SQLException {
         List<UploadFile> uploadFiles = new ArrayList<>();
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             ResultSet resultSet = select
                     .executeQuery(String.format("select * from files where file_name like '%%%s%%'", fileName));
             while (resultSet.next()) {

@@ -4,6 +4,7 @@ import com.kms.challenges.rbh.dao.ConnectionManager;
 import com.kms.challenges.rbh.dao.UserDao;
 import com.kms.challenges.rbh.model.User;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,7 +15,8 @@ import java.sql.Statement;
 public class UserDaoImpl extends AbstractMethodError implements UserDao {
     @Override
     public User getUser(long userId) throws SQLException {
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             try (ResultSet resultSet = select
                     .executeQuery(String.format("select * from user_accounts where id=%s", userId))) {
                 if (resultSet.next()) {
@@ -27,7 +29,8 @@ public class UserDaoImpl extends AbstractMethodError implements UserDao {
 
     @Override
     public User getUserByEmailAndPassword(String email, String password) throws SQLException {
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             try (ResultSet resultSet = select
                     .executeQuery(
                             String.format("select * from user_accounts where email='%s' and password='%s'", email,
@@ -44,7 +47,8 @@ public class UserDaoImpl extends AbstractMethodError implements UserDao {
 
     @Override
     public User getAdminUser() throws SQLException {
-        try (Statement select = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement select = connection
+                .createStatement()) {
             try (ResultSet resultSet = select
                     .executeQuery(
                             String.format("select * from user_accounts where role='%s'", User.ROLE.ADMIN))) {
@@ -68,7 +72,8 @@ public class UserDaoImpl extends AbstractMethodError implements UserDao {
 
     @Override
     public void addUser(User user) throws SQLException {
-        try (Statement insert = ConnectionManager.getConnection().createStatement()) {
+        try (Connection connection = ConnectionManager.getConnection(); Statement insert = connection
+                .createStatement()) {
             insert.execute(String.format(
                     "insert into user_accounts(email,first_name,last_name,password,role) values('%s','%s','%s','%s'," +
                             "'%s')",
