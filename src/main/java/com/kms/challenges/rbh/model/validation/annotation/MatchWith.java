@@ -1,4 +1,4 @@
-package com.kms.challenges.rbh.annotation;
+package com.kms.challenges.rbh.model.validation.annotation;
 
 /**
  * @author tkhuu.

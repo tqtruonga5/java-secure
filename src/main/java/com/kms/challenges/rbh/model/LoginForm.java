@@ -1,7 +1,7 @@
 package com.kms.challenges.rbh.model;
 
-import com.kms.challenges.rbh.annotation.FormField;
-import com.kms.challenges.rbh.annotation.Require;
+import com.kms.challenges.rbh.model.validation.annotation.FormField;
+import com.kms.challenges.rbh.model.validation.annotation.Require;
 
 /**
  * @author tkhuu.

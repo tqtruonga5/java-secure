@@ -1,8 +1,8 @@
 package com.kms.challenges.rbh.model.validation;
 
-import com.kms.challenges.rbh.annotation.FormField;
-import com.kms.challenges.rbh.annotation.MatchWith;
-import com.kms.challenges.rbh.annotation.Require;
+import com.kms.challenges.rbh.model.validation.annotation.FormField;
+import com.kms.challenges.rbh.model.validation.annotation.MatchWith;
+import com.kms.challenges.rbh.model.validation.annotation.Require;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
