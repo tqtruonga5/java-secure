@@ -6,7 +6,7 @@ import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.FileMetadata;
 import com.kms.challenges.rbh.model.UploadFile;
 import com.kms.challenges.rbh.model.User;
-import com.kms.challenges.rbh.model.error.ValidationError;
+import com.kms.challenges.rbh.model.validation.ValidationError;
 import com.kms.challenges.rbh.util.RabbitHolesUtil;
 import org.apache.commons.io.IOUtils;
 

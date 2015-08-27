@@ -4,8 +4,8 @@ import com.kms.challenges.rbh.dao.UserDao;
 import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.RegistrationForm;
 import com.kms.challenges.rbh.model.User;
-import com.kms.challenges.rbh.model.error.ValidationError;
-import com.kms.challenges.rbh.util.RabbitHolesUtil;
+import com.kms.challenges.rbh.model.validation.ValidationError;
+import com.kms.challenges.rbh.model.validation.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,8 +36,8 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, ValidationError> errorMap = new HashMap<>();
         try {
-            RegistrationForm form = RabbitHolesUtil
-                    .convertParameterMapToBean(RegistrationForm.class, req, errorMap);
+            RegistrationForm form = Validator
+                    .convertRequestToBean(RegistrationForm.class, req, errorMap);
             if (!errorMap.isEmpty()) {
                 req.setAttribute("validationErrors", errorMap);
                 req.setAttribute("registrationForm", form);

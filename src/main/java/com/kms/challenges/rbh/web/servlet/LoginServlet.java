@@ -4,8 +4,8 @@ import com.kms.challenges.rbh.dao.UserDao;
 import com.kms.challenges.rbh.dao.impl.UserDaoImpl;
 import com.kms.challenges.rbh.model.LoginForm;
 import com.kms.challenges.rbh.model.User;
-import com.kms.challenges.rbh.model.error.ValidationError;
-import com.kms.challenges.rbh.util.RabbitHolesUtil;
+import com.kms.challenges.rbh.model.validation.ValidationError;
+import com.kms.challenges.rbh.model.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
         Map<String, ValidationError> errorMap = new HashMap<>();
         LoginForm form=null;
         try {
-            form = RabbitHolesUtil.convertParameterMapToBean(LoginForm.class, req, errorMap);
+            form = Validator.convertRequestToBean(LoginForm.class, req, errorMap);
         } catch (IllegalAccessException|InstantiationException e) {
             throw new ServletException(e);
         }
