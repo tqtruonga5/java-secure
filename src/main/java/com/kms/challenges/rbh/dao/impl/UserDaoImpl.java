@@ -81,7 +81,7 @@ public class UserDaoImpl extends AbstractMethodError implements UserDao {
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getPassword());
             ps.setString(5, user.getRole().name());
-            ps.executeQuery();
+            ps.executeUpdate();
         }
     }
 }
