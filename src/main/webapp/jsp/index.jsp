@@ -4,6 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="rb" uri="http://rbh.kms.challenges.com/customtags"%>
+<%@ taglib prefix="e" uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
+<%@ taglib prefix="e" uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
 <t:layout>
     <jsp:attribute name="header"><fmt:message key="rabbitholes.homepage.title"/></jsp:attribute>
     <jsp:body>
@@ -30,9 +32,9 @@
                             </div>
                             <c:forEach var="file" items="${files}">
                                 <p>
-                                    <span>${file.uploader.firstName}</span> <span>: </span>
+                                    <span>${e:forHtmlContent(file.uploader.firstName) }</span> <span>: </span>
                                     <span><a href="/download?fileName=${file.fileName}&userId=${file.uploader.id}">${file.fileName}</a></span>
-                                    <span>${file.uploadNote}</span>
+                                    <span>${e:forHtmlContent(file.uploadNote) }</span>
                                     <rb:authenticate access="${user.role}" principleName="ADMIN">
                                         <a href="${pageContext.request.contextPath}/delete?fileId=${file.id}&r=home">Delete</a>
                                     </rb:authenticate>

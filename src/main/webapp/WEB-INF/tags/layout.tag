@@ -5,6 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="rbt" uri="http://rbh.kms.challenges.com/customtags" %>
+<%@ taglib prefix="e" uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
 <fmt:setBundle basename="i18n.message" scope="request"/>
 <html>
 <head>
@@ -46,7 +47,7 @@
                 <rbt:authorize accessMode="AUTHORIZED">
                     <li>
                         <form action="${pageContext.request.contextPath}/logout" method="POST">
-                            <fmt:message key="label.homepage.title"/> ${user.firstName} ${user.lastName}
+                            <fmt:message key="label.homepage.title"/> ${e:forHtmlContent(user.firstName)} ${e:forHtmlContent(user.lastName)}
                             <a href="/upload">Upload</a>
                             <button type="submit" class="btn btn-default navbar-btn">
                                 <fmt:message key="label.navigation.logout.link"/>
