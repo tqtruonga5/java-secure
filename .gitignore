@@ -1,2 +1,6 @@
 files/*
-/target/
+target/
+.settings/
+.project
+.classpath
+

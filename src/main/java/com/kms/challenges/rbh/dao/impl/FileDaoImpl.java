@@ -103,17 +103,21 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
         String deleteFilesUsersQuery = "delete from user_files where file_id = ?";
 
         try (Connection connection = ConnectionManager.getConnection();) {
-            PreparedStatement ps = connection.prepareStatement(deleteFileMetadataQuery);
-            ps.setLong(1, file.getFileMetadata().getId());
-            ps.executeUpdate();
+            try (PreparedStatement ps = connection.prepareStatement(deleteFilesUsersQuery)) {
+                ps.setLong(1, file.getFileMetadata().getId());
+                ps.executeUpdate();
+            }
 
-            ps = connection.prepareStatement(deleteFileQuery);
-            ps.setLong(1, file.getId());
-            ps.executeUpdate();
+            try (PreparedStatement ps = connection.prepareStatement(deleteFileQuery)) {
+                ps.setLong(1, file.getId());
+                ps.executeUpdate();
+            }
 
-            ps = connection.prepareStatement(deleteFilesUsersQuery);
-            ps.setLong(1, file.getId());
-            ps.executeUpdate();
+            try (PreparedStatement ps = connection.prepareStatement(deleteFileMetadataQuery)) {
+
+                ps.setLong(1, file.getId());
+                ps.executeUpdate();
+            }
 
             // delete.execute(String.format("delete from user_files where file_id=%s",
             // file.getId()));
@@ -210,9 +214,9 @@ public class FileDaoImpl extends AbstractRabbitHoleDao implements FileDao {
         List<UploadFile> uploadFiles = new ArrayList<>();
         String query = "select * from files where file_name like ? ";
         try (Connection connection = ConnectionManager.getConnection();
-                PreparedStatement select = connection.prepareStatement(query)) {
-            select.setString(1, "%" + fileName + "%");
-            try (ResultSet resultSet = select.executeQuery()) {
+                PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, "%" + fileName + "%");
+            try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
                     Long fileId = resultSet.getLong("id");
                     uploadFiles.add(getFile(fileId));
