@@ -5,7 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="rb" uri="http://rbh.kms.challenges.com/customtags"%>
 <%@ taglib prefix="e" uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
-<%@ taglib prefix="e" uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
 <t:layout>
     <jsp:attribute name="header"><fmt:message key="rabbitholes.homepage.title"/></jsp:attribute>
     <jsp:body>

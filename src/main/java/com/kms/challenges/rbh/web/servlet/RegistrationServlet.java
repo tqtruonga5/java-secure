@@ -23,6 +23,7 @@ import java.util.Map;
 @WebServlet(name = "registration-servlet", urlPatterns = "register")
 public class RegistrationServlet extends HttpServlet {
     private UserDao dao;
+
     public RegistrationServlet() {
         dao = new UserDaoImpl();
     }
@@ -36,8 +37,8 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, ValidationError> errorMap = new HashMap<>();
         try {
-            RegistrationForm form = Validator
-                    .parseToBeanAndValidate(RegistrationForm.class, req.getParameterMap(), errorMap);
+            RegistrationForm form = Validator.parseToBeanAndValidate(RegistrationForm.class, req.getParameterMap(),
+                    errorMap);
             if (!errorMap.isEmpty()) {
                 req.setAttribute("validationErrors", errorMap);
                 req.setAttribute("registrationForm", form);
@@ -45,9 +46,9 @@ public class RegistrationServlet extends HttpServlet {
                 return;
             }
             try {
-                dao.addUser(
-                        new User(null, form.getEmail(), form.getFirstName(), form.getLastName(), form.getPassword(),
-                                User.ROLE.USER));
+                User user = new User(null, form.getEmail(), form.getFirstName(), form.getLastName(),
+                                        form.getPassword(), User.ROLE.USER);
+                dao.addUser(user);
             } catch (SQLException e) {
                 throw new ServletException(e);
             }
@@ -57,5 +58,4 @@ public class RegistrationServlet extends HttpServlet {
 
         resp.sendRedirect("/login");
     }
-
 }
